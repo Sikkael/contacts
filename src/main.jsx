@@ -10,11 +10,11 @@ import Root, {
   loader as rootLoader,
   action as rootAction,
 } from "./routes/root";
-import Contact, {
-  loader as contactLoader,
-  action as contactAction,
-} from "./routes/contact";
-import EditContact, {
+import password, {
+  loader as passwordLoader,
+  action as passwordAction,
+} from "./routes/password";
+import Editpassword, {
   action as editAction,
 } from "./routes/edit";
 import { action as destroyAction } from "./routes/destroy";
@@ -38,19 +38,19 @@ const router = createBrowserRouter([
             element: <Index /> 
           },
           {
-            path: "contacts/:contactId",
-            element: <Contact />,
-            loader: contactLoader,
-            action: contactAction,
+            path: "passwords/:passwordId",
+            element: <password />,
+            loader: passwordLoader,
+            action: passwordAction,
           },
           {
-            path: "contacts/:contactId/edit",
-            element: <EditContact />,
-            loader: contactLoader,
+            path: "passwords/:passwordId/edit",
+            element: <Editpassword />,
+            loader: passwordLoader,
             action: editAction,
           },
           {
-            path: "contacts/:contactId/destroy",
+            path: "passwords/:passwordId/destroy",
             action: destroyAction,
             errorElement: <div>Oops! There was an error.</div>,
           },

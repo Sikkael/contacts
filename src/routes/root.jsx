@@ -7,24 +7,24 @@ import {
   useNavigation,
   useSubmit,
 } from "react-router-dom";
-import { getContacts, createContact } from "../contacts";
+import { getPasswords, createPassword } from "../passwords";
 import { useEffect } from "react";
 
 
 export async function action() {
-  const contact = await createContact();
-  return redirect(`/contacts/${contact.id}/edit`);
+  const password = await createPassword();
+  return redirect(`/passwords/${password.id}/edit`);
 }
 
 export async function loader({ request }) {
   const url = new URL(request.url);
   const q = url.searchParams.get("q");
-  const contacts = await getContacts(q);
-  return { contacts, q };
+  const passwords = await getPasswords(q);
+  return { passwords, q };
 }
 
 export default function Root() {
-  const { contacts, q } = useLoaderData();
+  const { passwords, q } = useLoaderData();
   const navigation = useNavigation();
   const submit = useSubmit();
   
@@ -42,13 +42,13 @@ export default function Root() {
     return (
       <>
         <div id="sidebar">
-          <h1>React Router Contacts</h1>
+          <h1>React Router passwords</h1>
           <div>
             <Form id="search-form" role="search">
               <input
                 id="q"
                 className={searching ? "loading" : ""}
-                aria-label="Search contacts"
+                aria-label="Search passwords"
                 placeholder="Search"
                 type="search"
                 name="q"
@@ -75,12 +75,12 @@ export default function Root() {
             </Form>
           </div>
           <nav>
-          {contacts.length ? (
+          {passwords.length ? (
             <ul>
-              {contacts.map((contact) => (
-                <li key={contact.id}>
+              {passwords.map((password) => (
+                <li key={password.id}>
                   <NavLink
-                    to={`contacts/${contact.id}`}
+                    to={`passwords/${password.id}`}
                     className={({ isActive, isPending }) =>
                       isActive
                         ? "active"
@@ -88,21 +88,21 @@ export default function Root() {
                         ? "pending"
                         : ""
                     }>
-                    {contact.first || contact.last ? (
+                    {password.first || password.last ? (
                       <>
-                        {contact.first} {contact.last}
+                        {password.first} {password.last}
                       </>
                     ) : (
                       <i>No Name</i>
                     )}{" "}
-                    {contact.favorite && <span>★</span>}
+                    {password.favorite && <span>★</span>}
                   </NavLink>
                 </li>
               ))}
             </ul>
           ) : (
             <p>
-              <i>No contacts</i>
+              <i>No passwords</i>
             </p>
           )}
         

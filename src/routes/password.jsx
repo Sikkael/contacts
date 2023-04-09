@@ -1,34 +1,34 @@
 import { Form, useLoaderData, useFetcher,} from "react-router-dom";
-import { getContact, updateContact } from "../contacts";
+import { getPassword, updatePassword } from "../passwords";
 
 
 export async function action({ request, params }) {
   let formData = await request.formData();
-  return updateContact(params.contactId, {
+  return updatePassword(params.passwordId, {
     favorite: formData.get("favorite") === "true",
   });
 }
 
 export async function loader({ params }) {
-  const contact = await getContact(params.contactId);
-  if (!contact) {
+  const password = await getPassword(params.passwordId);
+  if (!password) {
     throw new Response("", {
       status: 404,
       statusText: "Not Found",
     });
   }
-  return { contact };
+  return { password };
 }
 
-export default function Contact() {
-  const { contact } = useLoaderData();
-  console.log(new URL(contact.avatar, import.meta.url).href);
+export default function password() {
+  const { password } = useLoaderData();
+  console.log(new URL(password.avatar, import.meta.url).href);
   return (
-    <div id="contact">
+    <div id="password">
       <div>
         <img
-          key={contact.avatar}
-          src= {new URL("http://localhost:5173/src/images/"+contact.avatar, import.meta.url).href}
+          key={password.avatar}
+          src= {new URL("http://localhost:5173/src/images/"+password.avatar, import.meta.url).href}
         />
       </div>
       <div>
@@ -36,28 +36,28 @@ export default function Contact() {
       </div>
       <div>
         <h1>
-          {contact.first || contact.last ? (
+          {password.first || password.last ? (
             <>
-              {contact.first} {contact.last}
+              {password.first} {password.last}
             </>
           ) : (
             <i>No Name</i>
           )}{" "}
-          <Favorite contact={contact} />
+          <Favorite password={password} />
         </h1>
 
-        {contact.twitter && (
+        {password.twitter && (
           <p>
             <a
               target="_blank"
-              href={`https://twitter.com/${contact.twitter}`}
+              href={`https://twitter.com/${password.twitter}`}
             >
-              {contact.twitter}
+              {password.twitter}
             </a>
           </p>
         )}
 
-        {contact.notes && <p>{contact.notes}</p>}
+        {password.notes && <p>{password.notes}</p>}
 
         <div>
           <Form action="edit">
@@ -84,10 +84,10 @@ export default function Contact() {
   );
 }
 
-function Favorite({ contact }) {
+function Favorite({ password }) {
   const fetcher = useFetcher();
   // yes, this is a `let` for later
-  let favorite = contact.favorite;
+  let favorite = password.favorite;
   if (fetcher.formData) {
     favorite = fetcher.formData.get("favorite") === "true";
   }
